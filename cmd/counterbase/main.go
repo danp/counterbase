@@ -161,7 +161,6 @@ func (g *directoryGetter) get(ctx context.Context) (source.Directory, error) {
 
 	dir := fakeDirectory{C: counters}
 	return dir, nil
-
 }
 
 type submitGetter struct {

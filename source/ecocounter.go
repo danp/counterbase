@@ -94,7 +94,6 @@ func (g *EcoCounterGetter) Get(ctx context.Context, req GetRequest) ([]submit.Po
 		})
 	}
 	return sps, err
-
 }
 
 func (g *EcoCounterGetter) Counters(ctx context.Context, id string) ([]directory.Counter, error) {

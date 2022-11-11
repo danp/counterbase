@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sort"
 	"strconv"
@@ -75,7 +75,7 @@ func (q EcoVisioQuerier) Query(begin, end time.Time, resolution Resolution) ([]D
 	}
 	defer resp.Body.Close()
 
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("reading query response for %s: %w", q.FlowIDs, err)
 	}
@@ -178,7 +178,7 @@ func (a *EcoVisioAuth) auth() (string, error) {
 	}
 	defer resp.Body.Close()
 
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("reading eco visio auth response: %w", err)
 	}

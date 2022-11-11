@@ -17,7 +17,6 @@ func TestClientQuery(t *testing.T) {
 	const resp = `{"database": "data", "query_name": null, "rows": [[1616727600, 1], [1616731200, 2]], "truncated": false, "columns": ["time", "sum(value)"], "query": {"sql": "select time, sum(value) from counter_data where counter_id='south-park' and time >= 1616727600 and time < 1616814000 group by time", "params": {}}, "private": false, "allow_execute_sql": true, "query_ms": 3.7816818803548813}`
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		if got, want := r.URL.Query().Get("sql"), q; got != want {
 			t.Errorf("got query:\n%s\nwant:\n%s", got, want)
 		}
