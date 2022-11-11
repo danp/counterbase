@@ -17,13 +17,13 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type HalifaxTransitGetter struct {
+type HalifaxTransit struct {
 	fo   sync.Once
 	err  error
 	data map[string]halifaxTransitRoute
 }
 
-func (h *HalifaxTransitGetter) Get(ctx context.Context, req GetRequest) ([]submit.Point, error) {
+func (h *HalifaxTransit) Get(ctx context.Context, req GetRequest) ([]submit.Point, error) {
 	h.fo.Do(func() {
 		h.data = make(map[string]halifaxTransitRoute)
 		h.err = h.fetch(ctx)
@@ -48,7 +48,7 @@ func (h *HalifaxTransitGetter) Get(ctx context.Context, req GetRequest) ([]submi
 	return out, nil
 }
 
-func (h *HalifaxTransitGetter) Counters(ctx context.Context) ([]directory.Counter, error) {
+func (h *HalifaxTransit) Counters(ctx context.Context) ([]directory.Counter, error) {
 	h.fo.Do(func() {
 		h.data = make(map[string]halifaxTransitRoute)
 		h.err = h.fetch(ctx)
@@ -87,7 +87,7 @@ func (h *HalifaxTransitGetter) Counters(ctx context.Context) ([]directory.Counte
 	return counters, nil
 }
 
-func (h *HalifaxTransitGetter) fetch(ctx context.Context) error {
+func (h *HalifaxTransit) fetch(ctx context.Context) error {
 	loc, err := time.LoadLocation("America/Halifax")
 	if err != nil {
 		return err

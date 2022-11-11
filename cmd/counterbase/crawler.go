@@ -64,17 +64,17 @@ func (c crawlerExec) exec(ctx context.Context, args []string) error {
 		Submitter: sub,
 	}
 
-	var eg source.EcoCounterGetter
+	var eg source.EcoCounter
 	c.addEcoCounterPrivateDomains(&eg)
 	crawler.AddGetter("ecocounter", &eg)
 
-	var ht source.HalifaxTransitGetter
+	var ht source.HalifaxTransit
 	crawler.AddGetter("hfxtransit", &ht)
 
 	return crawler.Run(ctx)
 }
 
-func (c crawlerExec) addEcoCounterPrivateDomains(eg *source.EcoCounterGetter) {
+func (c crawlerExec) addEcoCounterPrivateDomains(eg *source.EcoCounter) {
 	for _, d := range c.ecoCounterPrivateDomains.vals {
 		envPrefix := "ECO_VISIO_" + strings.ToUpper(d)
 		envUsername := envPrefix + "_USERNAME"

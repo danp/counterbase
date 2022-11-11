@@ -26,11 +26,11 @@ type EcoCounterPrivateDomain struct {
 	auth *ecocounter.EcoVisioAuth
 }
 
-type EcoCounterGetter struct {
+type EcoCounter struct {
 	privateDomains map[string]EcoCounterPrivateDomain
 }
 
-func (g *EcoCounterGetter) AddPrivateDomain(dom EcoCounterPrivateDomain) error {
+func (g *EcoCounter) AddPrivateDomain(dom EcoCounterPrivateDomain) error {
 	if g.privateDomains == nil {
 		g.privateDomains = make(map[string]EcoCounterPrivateDomain)
 	}
@@ -39,7 +39,7 @@ func (g *EcoCounterGetter) AddPrivateDomain(dom EcoCounterPrivateDomain) error {
 	return nil
 }
 
-func (g *EcoCounterGetter) Get(ctx context.Context, req GetRequest) ([]submit.Point, error) {
+func (g *EcoCounter) Get(ctx context.Context, req GetRequest) ([]submit.Point, error) {
 	loc, err := time.LoadLocation("America/Halifax")
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func (g *EcoCounterGetter) Get(ctx context.Context, req GetRequest) ([]submit.Po
 	return sps, err
 }
 
-func (g *EcoCounterGetter) Counters(ctx context.Context, id string) ([]directory.Counter, error) {
+func (g *EcoCounter) Counters(ctx context.Context, id string) ([]directory.Counter, error) {
 	resp, err := http.Get("https://www.eco-visio.net/api/aladdin/1.0.0/pbl/publicwebpageplus/" + id + "?withNull=true")
 	if err != nil {
 		return nil, err

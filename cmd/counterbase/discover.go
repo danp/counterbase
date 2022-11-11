@@ -30,7 +30,7 @@ func newDiscoverCmd() *ffcli.Command {
 }
 
 func (d discoverExec) exec(ctx context.Context, args []string) error {
-	var ht source.HalifaxTransitGetter
+	var ht source.HalifaxTransit
 
 	counters, err := ht.Counters(ctx)
 	if err != nil {
