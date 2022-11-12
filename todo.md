@@ -2,7 +2,7 @@
 
 - remove hardcoded tz handling
 - more dynamic source register, eg not always halifax transit?
-- better data reading, drop prometheus bits
+- better data reading
 - bring in time range querying from bikehfx
 - comb over bikehfx for other bits to bring in
 - clean up func main / command handling stuff

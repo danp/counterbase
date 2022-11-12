@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/danp/counterbase/query"
 	"github.com/google/go-cmp/cmp"
-	"github.com/prometheus/common/model"
 )
 
 func TestClientQuery(t *testing.T) {
@@ -35,14 +35,9 @@ func TestClientQuery(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	want := query.Matrix{
-		{
-			Metric: model.Metric{"x": "y"},
-			Values: []model.SamplePair{
-				{Timestamp: model.Time(1616727600) * 1000, Value: 1},
-				{Timestamp: model.Time(1616731200) * 1000, Value: 2},
-			},
-		},
+	want := []query.Point{
+		{Time: time.Unix(1616727600, 0), Value: 1},
+		{Time: time.Unix(1616731200, 0), Value: 2},
 	}
 	if d := cmp.Diff(want, mat); d != "" {
 		t.Error(d)

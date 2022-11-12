@@ -7,15 +7,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/prometheus/common/model"
+	"time"
 )
 
 type Client struct {
 	URL string
 }
 
-func (c *Client) Query(ctx context.Context, q string) (Matrix, error) {
+func (c *Client) Query(ctx context.Context, q string) ([]Point, error) {
 	u, err := url.Parse(c.URL)
 	if err != nil {
 		return nil, err
@@ -52,19 +51,14 @@ func (c *Client) Query(ctx context.Context, q string) (Matrix, error) {
 		return nil, err
 	}
 
-	var sps []model.SamplePair
+	var pts []Point
 	for _, row := range resps.Rows {
-		sp := model.SamplePair{
-			Timestamp: model.Time(int64(row[0])),
-			Value:     model.SampleValue(row[1]),
+		p := Point{
+			Time:  time.Unix(int64(row[0]), 0),
+			Value: row[1],
 		}
-		sp.Timestamp *= 1000 // we store seconds, not millis
-		sps = append(sps, sp)
+		pts = append(pts, p)
 	}
 
-	mat := model.Matrix{
-		{Metric: model.Metric{"x": "y"}, Values: sps},
-	}
-
-	return mat, nil
+	return pts, nil
 }

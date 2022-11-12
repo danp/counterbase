@@ -1,7 +1,10 @@
 package query
 
-import "github.com/prometheus/common/model"
+import (
+	"time"
+)
 
-// Trying this out from the Prometheus API.
-
-type Matrix = model.Matrix
+type Point struct {
+	Time  time.Time
+	Value float64
+}

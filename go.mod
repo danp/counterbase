@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/google/go-cmp v0.5.9
 	github.com/peterbourgon/ff/v3 v3.3.0
-	github.com/prometheus/common v0.20.0
 	golang.org/x/exp v0.0.0-20221111094246-ab4555d3164f
 	modernc.org/sqlite v1.19.4
 )

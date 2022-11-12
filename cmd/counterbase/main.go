@@ -11,13 +11,13 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/danp/counterbase/directory"
 	"github.com/danp/counterbase/query"
 	"github.com/danp/counterbase/source"
 	"github.com/danp/counterbase/submit"
 	"github.com/peterbourgon/ff/v3/ffcli"
-	"github.com/prometheus/common/model"
 	_ "modernc.org/sqlite"
 )
 
@@ -233,7 +233,7 @@ func (s dbStorage) init(ctx context.Context) error {
 	return err
 }
 
-func (s dbStorage) Query(ctx context.Context, q string) (query.Matrix, error) {
+func (s dbStorage) Query(ctx context.Context, q string) ([]query.Point, error) {
 	tx, err := s.db.BeginTx(ctx, &sql.TxOptions{ReadOnly: true})
 	if err != nil {
 		return nil, err
@@ -246,21 +246,18 @@ func (s dbStorage) Query(ctx context.Context, q string) (query.Matrix, error) {
 	}
 	defer rows.Close()
 
-	var sps []model.SamplePair
+	var pts []query.Point
 	for rows.Next() {
-		var sp model.SamplePair
-		if err := rows.Scan(&sp.Timestamp, &sp.Value); err != nil {
+		var p query.Point
+		var t int64
+		if err := rows.Scan(&t, &p.Value); err != nil {
 			return nil, err
 		}
-		sp.Timestamp *= 1000 // we store seconds, not millis
-		sps = append(sps, sp)
+		p.Time = time.Unix(t, 0)
+		pts = append(pts, p)
 	}
 
-	mat := model.Matrix{
-		{Metric: model.Metric{"x": "y"}, Values: sps},
-	}
-
-	return mat, rows.Err()
+	return pts, rows.Err()
 }
 
 func (s dbStorage) Submit(ctx context.Context, req submit.Request) error {

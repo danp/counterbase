@@ -10,7 +10,6 @@ import (
 	"github.com/danp/counterbase/source"
 	"github.com/danp/counterbase/submit"
 	"github.com/google/go-cmp/cmp"
-	"github.com/prometheus/common/model"
 )
 
 func TestCrawlerScheme(t *testing.T) {
@@ -212,9 +211,9 @@ func TestCrawlerAfterLatest(t *testing.T) {
 	}
 
 	que := fakeQuerier{
-		P: map[string]query.Matrix{
-			"select time, value from latest_counter_data where counter_id='test-1' and direction_id='nb'": {
-				{Metric: model.Metric{"x": "y"}, Values: []model.SamplePair{{Timestamp: model.TimeFromUnix(now.Add(-5 * time.Hour).Unix()), Value: 3}}},
+		P: map[string][]query.Point{
+			"select time, value from latest_counter_data where counter_id='test-1' and direction_id='nb'": []query.Point{
+				{Time: now.Add(-5 * time.Hour), Value: 3},
 			},
 		},
 	}
@@ -593,10 +592,10 @@ func (f fakeDirectory) Counters(context.Context) ([]directory.Counter, error) {
 }
 
 type fakeQuerier struct {
-	P map[string]query.Matrix
+	P map[string][]query.Point
 }
 
-func (f fakeQuerier) Query(ctx context.Context, q string) (query.Matrix, error) {
+func (f fakeQuerier) Query(ctx context.Context, q string) ([]query.Point, error) {
 	return f.P[q], nil
 }
 

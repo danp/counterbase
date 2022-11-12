@@ -19,7 +19,7 @@ type Directory interface {
 }
 
 type Querier interface {
-	Query(ctx context.Context, q string) (query.Matrix, error)
+	Query(ctx context.Context, q string) ([]query.Point, error)
 }
 
 type Crawler struct {
@@ -70,12 +70,12 @@ func (c *Crawler) Run(ctx context.Context) error {
 			}
 
 			after := ctr.ServiceRanges[len(ctr.ServiceRanges)-1].Start.Add(-1 * time.Minute)
-			mat, err := c.Querier.Query(ctx, "select time, value from latest_counter_data where counter_id='"+ctr.ID+"' and direction_id='"+dir.ID+"'")
+			latest, err := c.Querier.Query(ctx, "select time, value from latest_counter_data where counter_id='"+ctr.ID+"' and direction_id='"+dir.ID+"'")
 			if err != nil {
 				return err
 			}
-			if len(mat) > 0 && len(mat[0].Values) > 0 {
-				after = mat[0].Values[0].Timestamp.Time()
+			if len(latest) > 0 {
+				after = latest[0].Time
 				if slices.Contains(ctr.Tags, "backdate1d") {
 					after = after.AddDate(0, 0, -1)
 					log.Println("backdating", ctr.ID, "request to", after.Format(time.RFC3339))
