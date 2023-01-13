@@ -23,7 +23,7 @@ func (q EcoVisioQuerier) Query(begin, end time.Time, resolution Resolution) ([]D
 	case ResolutionDay:
 		ress = "day"
 	case ResolutionHour:
-		ress = "1hour"
+		ress = "hour"
 	}
 	if ress == "" {
 		return nil, nil
