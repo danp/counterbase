@@ -7,6 +7,7 @@ import (
 type Counter struct {
 	ID            string         `json:"id"`
 	Name          string         `json:"name"`
+	ShortName     string         `json:"short_name,omitempty"`
 	ServiceRanges []ServiceRange `json:"service_ranges"`
 	Mode          string         `json:"mode"`
 	Location      Location       `json:"location"`
