@@ -1,11 +1,10 @@
 module github.com/danp/counterbase
 
-go 1.20
+go 1.22.0
 
 require (
 	github.com/google/go-cmp v0.5.9
 	github.com/peterbourgon/ff/v3 v3.3.0
-	golang.org/x/exp v0.0.0-20221111094246-ab4555d3164f
 	modernc.org/sqlite v1.19.4
 )
 

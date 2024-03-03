@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/danp/counterbase/directory"
 	"github.com/danp/counterbase/query"
 	"github.com/danp/counterbase/submit"
-	"golang.org/x/exp/slices"
 )
 
 type Directory interface {

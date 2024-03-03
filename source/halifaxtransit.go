@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,7 +15,6 @@ import (
 
 	"github.com/danp/counterbase/directory"
 	"github.com/danp/counterbase/submit"
-	"golang.org/x/exp/slices"
 )
 
 type HalifaxTransit struct {
